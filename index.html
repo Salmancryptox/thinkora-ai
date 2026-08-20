@@ -6,367 +6,385 @@
 
 <title>Thinkora AI — Ask. Create. Learn. Solve.</title>
 
-<meta name="description" content="Thinkora AI — Ask, Create, Learn and Solve.">
+<meta name="description"
+content="Thinkora AI — a free browser-based AI assistant for asking, creating, learning and solving.">
 
 <style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f6f8fc;
+    color: #172033;
+    min-height: 100vh;
+}
+
+header {
+    height: 72px;
+    background: white;
+    border-bottom: 1px solid #e7eaf0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #6c63ff, #4f46e5);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    box-shadow: 0 8px 20px rgba(79,70,229,.25);
+}
+
+.logo span {
+    color: #5b52e8;
+}
+
+nav {
+    display: flex;
+    gap: 28px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #687086;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+nav a:hover {
+    color: #5b52e8;
+}
+
+.hero {
+    text-align: center;
+    padding: 70px 20px 35px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 30px;
+    background: #eeedff;
+    color: #574fe0;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(42px, 7vw, 76px);
+    line-height: 1;
+    letter-spacing: -3px;
+    margin-bottom: 20px;
+}
+
+.hero h1 span {
+    color: #5b52e8;
+}
+
+.hero p {
+    max-width: 650px;
+    margin: auto;
+    color: #6c7488;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.ai-container {
+    width: min(900px, 92%);
+    margin: 25px auto 70px;
+    background: white;
+    border: 1px solid #e4e7ee;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(31,41,55,.09);
+    overflow: hidden;
+}
+
+.chat-area {
+    min-height: 310px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+.welcome {
+    text-align: center;
+    padding: 45px 20px;
+    color: #7a8295;
+}
+
+.welcome-icon {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.welcome h2 {
+    color: #242b3d;
+    margin-bottom: 8px;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 18px;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 78%;
+    padding: 13px 17px;
+    border-radius: 17px;
+    line-height: 1.5;
+    font-size: 15px;
+    white-space: pre-wrap;
+}
+
+.message.user .bubble {
+    background: #5b52e8;
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.message.ai .bubble {
+    background: #f0f2f7;
+    color: #283044;
+    border-bottom-left-radius: 5px;
+}
+
+.input-area {
+    border-top: 1px solid #e8eaf0;
+    padding: 17px;
+    background: #fafbfc;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1px solid #dfe3eb;
+    border-radius: 17px;
+    padding: 8px 8px 8px 17px;
+}
+
+.input-box:focus-within {
+    border-color: #7169ef;
+    box-shadow: 0 0 0 3px rgba(113,105,239,.1);
+}
+
+#userInput {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #202638;
+    background: transparent;
+}
+
+#userInput::placeholder {
+    color: #9aa1b1;
+}
+
+#sendBtn {
+    border: none;
+    background: #5b52e8;
+    color: white;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    cursor: pointer;
+    font-size: 19px;
+    transition: .2s;
+}
+
+#sendBtn:hover {
+    transform: translateY(-1px);
+    background: #4940d5;
+}
+
+#sendBtn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.status {
+    text-align: center;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: #70798d;
+    background: #f7f8fb;
+    border-bottom: 1px solid #eceef3;
+}
+
+.features {
+    width: min(1100px, 92%);
+    margin: 0 auto 80px;
+}
+
+.features-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.features-title h2 {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.features-title p {
+    color: #778096;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 18px;
+}
+
+.feature {
+    background: white;
+    border: 1px solid #e5e8ef;
+    border-radius: 18px;
+    padding: 25px 20px;
+    transition: .25s;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(31,41,55,.08);
+}
+
+.feature-icon {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    margin-bottom: 8px;
+    font-size: 17px;
+}
+
+.feature p {
+    color: #747d91;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+footer {
+    border-top: 1px solid #e6e8ee;
+    background: white;
+    text-align: center;
+    padding: 28px 20px;
+    color: #8991a2;
+    font-size: 13px;
+}
+
+.typing {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing span {
+    width: 6px;
+    height: 6px;
+    background: #777f91;
+    border-radius: 50%;
+    animation: bounce 1s infinite;
+}
+
+.typing span:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.typing span:nth-child(3) {
+    animation-delay: .3s;
+}
+
+@keyframes bounce {
+    0%,60%,100% {
+        transform: translateY(0);
     }
 
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f6f8fc;
-        color: #172033;
-        min-height: 100vh;
+    30% {
+        transform: translateY(-5px);
     }
+}
 
-    /* HEADER */
-    header {
-        height: 72px;
-        background: white;
-        border-bottom: 1px solid #e7eaf0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 6%;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .logo {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 23px;
-        font-weight: 700;
-    }
-
-    .logo-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 13px;
-        background: linear-gradient(135deg, #6c63ff, #4f46e5);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 21px;
-        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
-    }
-
-    .logo span {
-        color: #5b52e8;
-    }
+@media (max-width:800px) {
 
     nav {
-        display: flex;
-        gap: 28px;
-    }
-
-    nav a {
-        text-decoration: none;
-        color: #687086;
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    nav a:hover {
-        color: #5b52e8;
-    }
-
-    /* HERO */
-    .hero {
-        text-align: center;
-        padding: 70px 20px 35px;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 8px 15px;
-        border-radius: 30px;
-        background: #eeedff;
-        color: #574fe0;
-        font-size: 13px;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-
-    .hero h1 {
-        font-size: clamp(42px, 7vw, 76px);
-        line-height: 1;
-        letter-spacing: -3px;
-        margin-bottom: 20px;
-    }
-
-    .hero h1 span {
-        color: #5b52e8;
-    }
-
-    .hero p {
-        max-width: 650px;
-        margin: auto;
-        color: #6c7488;
-        font-size: 18px;
-        line-height: 1.6;
-    }
-
-    /* AI BOX */
-    .ai-container {
-        width: min(900px, 92%);
-        margin: 25px auto 70px;
-        background: white;
-        border: 1px solid #e4e7ee;
-        border-radius: 24px;
-        box-shadow: 0 20px 60px rgba(31, 41, 55, 0.09);
-        overflow: hidden;
-    }
-
-    .chat-area {
-        min-height: 310px;
-        max-height: 500px;
-        overflow-y: auto;
-        padding: 25px;
-    }
-
-    .welcome {
-        text-align: center;
-        padding: 45px 20px;
-        color: #7a8295;
-    }
-
-    .welcome-icon {
-        font-size: 45px;
-        margin-bottom: 15px;
-    }
-
-    .welcome h2 {
-        color: #242b3d;
-        margin-bottom: 8px;
-    }
-
-    .message {
-        display: flex;
-        margin-bottom: 18px;
-    }
-
-    .message.user {
-        justify-content: flex-end;
-    }
-
-    .bubble {
-        max-width: 78%;
-        padding: 13px 17px;
-        border-radius: 17px;
-        line-height: 1.5;
-        font-size: 15px;
-    }
-
-    .message.user .bubble {
-        background: #5b52e8;
-        color: white;
-        border-bottom-right-radius: 5px;
-    }
-
-    .message.ai .bubble {
-        background: #f0f2f7;
-        color: #283044;
-        border-bottom-left-radius: 5px;
-    }
-
-    /* INPUT */
-    .input-area {
-        border-top: 1px solid #e8eaf0;
-        padding: 17px;
-        background: #fafbfc;
-    }
-
-    .input-box {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: white;
-        border: 1px solid #dfe3eb;
-        border-radius: 17px;
-        padding: 8px 8px 8px 17px;
-    }
-
-    .input-box:focus-within {
-        border-color: #7169ef;
-        box-shadow: 0 0 0 3px rgba(113, 105, 239, 0.1);
-    }
-
-    #userInput {
-        flex: 1;
-        border: none;
-        outline: none;
-        font-size: 15px;
-        color: #202638;
-        background: transparent;
-    }
-
-    #userInput::placeholder {
-        color: #9aa1b1;
-    }
-
-    #sendBtn {
-        border: none;
-        background: #5b52e8;
-        color: white;
-        width: 46px;
-        height: 46px;
-        border-radius: 13px;
-        cursor: pointer;
-        font-size: 19px;
-        transition: 0.2s;
-    }
-
-    #sendBtn:hover {
-        transform: translateY(-1px);
-        background: #4940d5;
-    }
-
-    /* FEATURES */
-    .features {
-        width: min(1100px, 92%);
-        margin: 0 auto 80px;
-    }
-
-    .features-title {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .features-title h2 {
-        font-size: 30px;
-        margin-bottom: 8px;
-    }
-
-    .features-title p {
-        color: #778096;
+        display: none;
     }
 
     .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
+        grid-template-columns: repeat(2,1fr);
     }
 
-    .feature {
-        background: white;
-        border: 1px solid #e5e8ef;
-        border-radius: 18px;
-        padding: 25px 20px;
-        transition: 0.25s;
+    .hero {
+        padding-top: 50px;
+    }
+}
+
+@media (max-width:520px) {
+
+    .feature-grid {
+        grid-template-columns: 1fr;
     }
 
-    .feature:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 35px rgba(31, 41, 55, 0.08);
+    .hero h1 {
+        letter-spacing: -2px;
     }
 
-    .feature-icon {
-        font-size: 28px;
-        margin-bottom: 15px;
+    .hero p {
+        font-size: 16px;
     }
 
-    .feature h3 {
-        margin-bottom: 8px;
-        font-size: 17px;
+    .bubble {
+        max-width: 88%;
     }
+}
 
-    .feature p {
-        color: #747d91;
-        line-height: 1.5;
-        font-size: 14px;
-    }
-
-    /* FOOTER */
-    footer {
-        border-top: 1px solid #e6e8ee;
-        background: white;
-        text-align: center;
-        padding: 28px 20px;
-        color: #8991a2;
-        font-size: 13px;
-    }
-
-    /* TYPING */
-    .typing {
-        display: inline-flex;
-        gap: 4px;
-        align-items: center;
-    }
-
-    .typing span {
-        width: 6px;
-        height: 6px;
-        background: #777f91;
-        border-radius: 50%;
-        animation: bounce 1s infinite;
-    }
-
-    .typing span:nth-child(2) {
-        animation-delay: 0.15s;
-    }
-
-    .typing span:nth-child(3) {
-        animation-delay: 0.3s;
-    }
-
-    @keyframes bounce {
-        0%, 60%, 100% {
-            transform: translateY(0);
-        }
-
-        30% {
-            transform: translateY(-5px);
-        }
-    }
-
-    /* MOBILE */
-    @media (max-width: 800px) {
-        nav {
-            display: none;
-        }
-
-        .feature-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .hero {
-            padding-top: 50px;
-        }
-    }
-
-    @media (max-width: 520px) {
-        .feature-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .hero h1 {
-            letter-spacing: -2px;
-        }
-
-        .hero p {
-            font-size: 16px;
-        }
-
-        .bubble {
-            max-width: 88%;
-        }
-    }
 </style>
 </head>
+
 
 <body>
 
 <header>
+
     <div class="logo">
+
         <div class="logo-icon">✦</div>
+
         Thinkora <span>AI</span>
+
     </div>
 
     <nav>
@@ -374,18 +392,24 @@
         <a href="#features">Features</a>
         <a href="#about">About</a>
     </nav>
+
 </header>
 
 
 <section class="hero">
 
-    <div class="badge">✦ FREE AI EXPERIENCE</div>
+    <div class="badge">
+        ✦ FREE LOCAL AI
+    </div>
 
-    <h1>Think <span>smarter.</span></h1>
+    <h1>
+        Think <span>smarter.</span>
+    </h1>
 
     <p>
-        Welcome to Thinkora AI — your simple space to ask questions,
-        explore ideas, learn new things and solve problems.
+        Welcome to Thinkora AI — your private browser-based
+        AI assistant for asking questions, exploring ideas,
+        learning and solving problems.
     </p>
 
 </section>
@@ -393,16 +417,24 @@
 
 <section class="ai-container" id="chat">
 
+    <div class="status" id="status">
+        Preparing Thinkora AI...
+    </div>
+
     <div class="chat-area" id="chatArea">
 
         <div class="welcome" id="welcome">
 
-            <div class="welcome-icon">🧠</div>
+            <div class="welcome-icon">
+                🧠
+            </div>
 
-            <h2>How can I help you?</h2>
+            <h2>
+                How can I help you?
+            </h2>
 
             <p>
-                Ask me something to get started.
+                Thinkora's AI engine will run directly in your browser.
             </p>
 
         </div>
@@ -421,7 +453,11 @@
                 autocomplete="off"
             >
 
-            <button id="sendBtn" title="Send">
+            <button
+                id="sendBtn"
+                title="Send"
+                disabled
+            >
                 ➤
             </button>
 
@@ -436,9 +472,13 @@
 
     <div class="features-title">
 
-        <h2>What can Thinkora do?</h2>
+        <h2>
+            What can Thinkora do?
+        </h2>
 
-        <p>A growing AI platform designed around useful tools.</p>
+        <p>
+            A growing AI platform designed around useful tools.
+        </p>
 
     </div>
 
@@ -447,12 +487,17 @@
 
         <div class="feature">
 
-            <div class="feature-icon">💬</div>
+            <div class="feature-icon">
+                💬
+            </div>
 
-            <h3>Ask</h3>
+            <h3>
+                Ask
+            </h3>
 
             <p>
-                Ask questions and explore ideas through a simple AI interface.
+                Ask questions and have a conversation with the
+                browser-based AI model.
             </p>
 
         </div>
@@ -460,12 +505,16 @@
 
         <div class="feature">
 
-            <div class="feature-icon">✍️</div>
+            <div class="feature-icon">
+                ✍️
+            </div>
 
-            <h3>Create</h3>
+            <h3>
+                Create
+            </h3>
 
             <p>
-                Develop ideas, write content and turn your thoughts into something useful.
+                Develop ideas and create useful content with AI assistance.
             </p>
 
         </div>
@@ -473,12 +522,16 @@
 
         <div class="feature">
 
-            <div class="feature-icon">📚</div>
+            <div class="feature-icon">
+                📚
+            </div>
 
-            <h3>Learn</h3>
+            <h3>
+                Learn
+            </h3>
 
             <p>
-                Explore concepts and make complicated subjects easier to understand.
+                Explore concepts and make difficult subjects easier to understand.
             </p>
 
         </div>
@@ -486,12 +539,16 @@
 
         <div class="feature">
 
-            <div class="feature-icon">💡</div>
+            <div class="feature-icon">
+                💡
+            </div>
 
-            <h3>Solve</h3>
+            <h3>
+                Solve
+            </h3>
 
             <p>
-                Work through problems and discover practical approaches.
+                Ask the AI to work through everyday questions and problems.
             </p>
 
         </div>
@@ -508,49 +565,100 @@
 </footer>
 
 
-<script>
+<script type="module">
 
-const input = document.getElementById("userInput");
-const sendBtn = document.getElementById("sendBtn");
-const chatArea = document.getElementById("chatArea");
-const welcome = document.getElementById("welcome");
+import { pipeline } from
+"https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.0.1";
 
 
-function addMessage(text, type) {
+const MODEL =
+"onnx-community/SmolLM2-360M-ONNX";
+
+
+let generator = null;
+
+let isGenerating = false;
+
+
+const input =
+document.getElementById("userInput");
+
+const sendBtn =
+document.getElementById("sendBtn");
+
+const chatArea =
+document.getElementById("chatArea");
+
+const welcome =
+document.getElementById("welcome");
+
+const status =
+document.getElementById("status");
+
+
+const conversation = [
+
+    {
+        role: "system",
+        content:
+        "You are Thinkora AI, a helpful, friendly and concise AI assistant. Give clear answers and be honest when you are unsure."
+    }
+
+];
+
+
+function addMessage(text,type) {
 
     if (welcome) {
         welcome.style.display = "none";
     }
 
-    const message = document.createElement("div");
 
-    message.className = "message " + type;
+    const message =
+    document.createElement("div");
 
-    const bubble = document.createElement("div");
+    message.className =
+    "message " + type;
 
-    bubble.className = "bubble";
 
-    bubble.textContent = text;
+    const bubble =
+    document.createElement("div");
+
+    bubble.className =
+    "bubble";
+
+    bubble.textContent =
+    text;
+
 
     message.appendChild(bubble);
 
     chatArea.appendChild(message);
 
-    chatArea.scrollTop = chatArea.scrollHeight;
+    chatArea.scrollTop =
+    chatArea.scrollHeight;
+
 }
 
 
 function addTyping() {
 
-    const message = document.createElement("div");
+    const message =
+    document.createElement("div");
 
-    message.className = "message ai";
+    message.className =
+    "message ai";
 
-    message.id = "typingMessage";
+    message.id =
+    "typingMessage";
 
-    const bubble = document.createElement("div");
 
-    bubble.className = "bubble";
+    const bubble =
+    document.createElement("div");
+
+    bubble.className =
+    "bubble";
+
 
     bubble.innerHTML = `
         <div class="typing">
@@ -560,108 +668,280 @@ function addTyping() {
         </div>
     `;
 
+
     message.appendChild(bubble);
 
     chatArea.appendChild(message);
 
-    chatArea.scrollTop = chatArea.scrollHeight;
+    chatArea.scrollTop =
+    chatArea.scrollHeight;
+
 }
 
 
-function getLocalResponse(question) {
+async function loadAI() {
 
-    const q = question.toLowerCase().trim();
+    try {
+
+        status.textContent =
+        "Loading Thinkora AI model...";
 
 
-    if (q.includes("hello") || q.includes("hi") || q.includes("hey")) {
-        return "Hello! 👋 I'm Thinkora AI. I'm ready to help you explore ideas, learn and solve problems.";
+        const hasWebGPU =
+        "gpu" in navigator;
+
+
+        const device =
+        hasWebGPU
+        ? "webgpu"
+        : "wasm";
+
+
+        const dtype =
+        hasWebGPU
+        ? "q4f16"
+        : "q4";
+
+
+        generator =
+        await pipeline(
+            "text-generation",
+            MODEL,
+            {
+                device: device,
+                dtype: dtype,
+
+                progress_callback: (progress) => {
+
+                    if (
+                        progress &&
+                        progress.status === "progress" &&
+                        typeof progress.progress === "number"
+                    ) {
+
+                        status.textContent =
+                        "Loading AI model: " +
+                        Math.round(progress.progress) +
+                        "%";
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        status.textContent =
+        "Thinkora AI is ready ✓";
+
+
+        sendBtn.disabled =
+        false;
+
+
+    } catch(error) {
+
+        console.error(error);
+
+
+        status.textContent =
+        "AI model could not load. Please refresh the page and try again.";
+
     }
 
-
-    if (q.includes("who are you") || q.includes("what are you")) {
-        return "I'm Thinkora AI — a free browser-based AI experience. This first version runs directly on your website without a paid API.";
-    }
-
-
-    if (q.includes("thinkora")) {
-        return "Thinkora AI is designed around four ideas: Ask, Create, Learn and Solve. 🚀";
-    }
-
-
-    if (q.includes("time")) {
-        return "The current time on your device is " + new Date().toLocaleTimeString() + ".";
-    }
-
-
-    if (q.includes("date")) {
-        return "Today's date is " + new Date().toLocaleDateString() + ".";
-    }
-
-
-    if (q.includes("thank")) {
-        return "You're welcome! 😊";
-    }
-
-
-    if (q.includes("free")) {
-        return "Yes. This version is designed to run without a paid AI API, so the website can be hosted on GitHub Pages for free.";
-    }
-
-
-    if (
-        q.includes("help") ||
-        q.includes("what can you do")
-    ) {
-        return "I can currently demonstrate basic conversations, greetings, date/time responses and Thinkora information. We're going to expand this into a much more capable AI platform.";
-    }
-
-
-    return "That's an interesting question! 🧠 This is Thinkora AI's first free browser-based version. The next stage will make the AI engine much more capable while keeping the project focused on free technology.";
 }
 
 
-function sendMessage() {
+async function askAI(question) {
 
-    const question = input.value.trim();
+    conversation.push({
 
-    if (!question) {
+        role: "user",
+
+        content: question
+
+    });
+
+
+    const messages =
+    conversation.slice(-8);
+
+
+    const prompt =
+    generator.tokenizer.apply_chat_template(
+        messages,
+        {
+            tokenize: false,
+            add_generation_prompt: true
+        }
+    );
+
+
+    const result =
+    await generator(
+        prompt,
+        {
+            max_new_tokens: 160,
+            temperature: 0.7,
+            do_sample: true,
+            repetition_penalty: 1.1
+        }
+    );
+
+
+    let answer =
+    result[0].generated_text;
+
+
+    if (answer.startsWith(prompt)) {
+
+        answer =
+        answer.slice(prompt.length);
+
+    }
+
+
+    answer =
+    answer.trim();
+
+
+    if (!answer) {
+
+        answer =
+        "I wasn't able to generate an answer. Please try asking in a different way.";
+
+    }
+
+
+    conversation.push({
+
+        role: "assistant",
+
+        content: answer
+
+    });
+
+
+    return answer;
+
+}
+
+
+async function sendMessage() {
+
+    const question =
+    input.value.trim();
+
+
+    if (!question || !generator || isGenerating) {
         return;
     }
 
 
-    addMessage(question, "user");
+    isGenerating =
+    true;
+
+    sendBtn.disabled =
+    true;
+
+
+    addMessage(
+        question,
+        "user"
+    );
+
 
     input.value = "";
+
 
     addTyping();
 
 
-    setTimeout(() => {
+    try {
 
-        const typing = document.getElementById("typingMessage");
+        const answer =
+        await askAI(question);
+
+
+        const typing =
+        document.getElementById(
+            "typingMessage"
+        );
+
 
         if (typing) {
             typing.remove();
         }
 
-        const response = getLocalResponse(question);
 
-        addMessage(response, "ai");
+        addMessage(
+            answer,
+            "ai"
+        );
 
-    }, 700);
+
+    } catch(error) {
+
+        console.error(error);
+
+
+        const typing =
+        document.getElementById(
+            "typingMessage"
+        );
+
+
+        if (typing) {
+            typing.remove();
+        }
+
+
+        addMessage(
+            "Sorry, something went wrong while generating the answer. Please try again.",
+            "ai"
+        );
+
+    }
+
+
+    isGenerating =
+    false;
+
+    sendBtn.disabled =
+    false;
+
+    input.focus();
+
 }
 
 
-sendBtn.addEventListener("click", sendMessage);
+sendBtn.addEventListener(
+    "click",
+    sendMessage
+);
 
 
-input.addEventListener("keydown", function(event) {
+input.addEventListener(
+    "keydown",
+    (event) => {
 
-    if (event.key === "Enter") {
-        sendMessage();
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendMessage();
+
+        }
+
     }
+);
 
-});
+
+loadAI();
 
 </script>
 
