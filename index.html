@@ -591,7 +591,7 @@ import { pipeline } from
 
 
 const MODEL =
-"onnx-community/SmolLM2-360M-ONNX";
+"HuggingFaceTB/SmolLM2-360M-Instruct";
 
 
 let generator = null;
@@ -791,6 +791,61 @@ async function loadAI() {
 /* AI RESPONSE */
 
 async function askAI(question) {
+
+    conversation.push({
+        role: "user",
+        content: question
+    });
+
+    const messages = conversation.slice(-8);
+
+    console.log("Thinkora messages:", messages);
+
+    const result = await generator(messages, {
+        max_new_tokens: 160,
+        temperature: 0.7,
+        do_sample: true,
+        repetition_penalty: 1.1
+    });
+
+    console.log("Thinkora result:", result);
+
+    let answer = "";
+
+    if (result && result[0]) {
+
+        const generated = result[0].generated_text;
+
+        if (Array.isArray(generated)) {
+
+            const lastMessage =
+                generated[generated.length - 1];
+
+            answer =
+                lastMessage?.content || "";
+
+        } else {
+
+            answer =
+                String(generated || "");
+
+        }
+    }
+
+    answer = answer.trim();
+
+    if (!answer) {
+        answer =
+            "I wasn't able to generate an answer. Please try again.";
+    }
+
+    conversation.push({
+        role: "assistant",
+        content: answer
+    });
+
+    return answer;
+
 
     conversation.push({
 
