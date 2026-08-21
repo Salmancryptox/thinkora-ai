@@ -976,10 +976,12 @@ async function askAI(question) {
     if (!answer) {
 
         answer =
-        "I wasn't able to generate an answer. Please try asking in a different way.";
+       if (!answer) {
+
+        answer =
+            "I wasn't able to generate an answer. Please try asking in a different way.";
 
     }
-
 
     conversation.push({
 
@@ -989,9 +991,6 @@ async function askAI(question) {
 
     });
 
-
-   
-
 }
 
 
@@ -1000,8 +999,7 @@ async function askAI(question) {
 async function sendMessage() {
 
     const question =
-    input.value.trim();
-
+       
 
     if (
         !question ||
