@@ -587,7 +587,7 @@ footer {
 <script type="module">
 
 import { pipeline } from
-"https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.0.1";
+"https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.2";
 
 
 const MODEL =
@@ -704,20 +704,8 @@ async function loadAI() {
         "Loading Thinkora AI model...";
 
 
-        const hasWebGPU =
-        "gpu" in navigator;
-
-
-        const device =
-        hasWebGPU
-        ? "webgpu"
-        : "wasm";
-
-
-        const dtype =
-        hasWebGPU
-        ? "q4f16"
-        : "q4";
+       const device = "wasm";
+const dtype = "q4";
 
 
         console.log("Thinkora device:", device);
