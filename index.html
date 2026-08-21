@@ -826,9 +826,121 @@ async function loadAI() {
 }
 
 
-async function askAI(
-    question
-) {
+async function askAI(question) {
+
+    conversation.push({
+        role: "user",
+        content: question
+    });
+
+    const messages = conversation.slice(-8);
+
+    let prompt = "";
+
+    for (const message of messages) {
+
+        if (message.role === "system") {
+
+            prompt +=
+                "System: " +
+                message.content +
+                "\n\n";
+
+        }
+
+        else if (message.role === "user") {
+
+            prompt +=
+                "User: " +
+                message.content +
+                "\n\n";
+
+        }
+
+        else if (message.role === "assistant") {
+
+            prompt +=
+                "Assistant: " +
+                message.content +
+                "\n\n";
+
+        }
+
+    }
+
+    prompt += "Assistant:";
+
+
+    console.log(
+        "Thinkora prompt:",
+        prompt
+    );
+
+
+    const result = await generator(
+        prompt,
+        {
+            max_new_tokens: 120,
+            temperature: 0.7,
+            do_sample: true,
+            repetition_penalty: 1.1,
+            return_full_text: false
+        }
+    );
+
+
+    let answer = "";
+
+
+    if (
+        result &&
+        result[0] &&
+        typeof result[0].generated_text === "string"
+    ) {
+
+        answer =
+            result[0].generated_text.trim();
+
+    }
+
+
+    answer =
+        answer
+        .replace(
+            /^Assistant:\s*/i,
+            ""
+        )
+        .replace(
+            /^<\|im_start\|>assistant\s*/i,
+            ""
+        )
+        .replace(
+            /<\|im_end\|>[\s\S]*$/i,
+            ""
+        )
+        .trim();
+
+
+    if (!answer) {
+
+        answer =
+            "I wasn't able to generate an answer. Please try asking in a different way.";
+
+    }
+
+
+    conversation.push({
+
+        role: "assistant",
+
+        content: answer
+
+    });
+
+
+    return answer;
+
+}
 
     conversation.push({
 
