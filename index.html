@@ -24,6 +24,8 @@ body {
     min-height: 100vh;
 }
 
+/* HEADER */
+
 header {
     height: 72px;
     background: white;
@@ -78,6 +80,8 @@ nav a:hover {
     color: #5b52e8;
 }
 
+/* HERO */
+
 .hero {
     text-align: center;
     padding: 70px 20px 35px;
@@ -112,6 +116,8 @@ nav a:hover {
     font-size: 18px;
     line-height: 1.6;
 }
+
+/* AI CHAT */
 
 .ai-container {
     width: min(900px, 92%);
@@ -162,6 +168,7 @@ nav a:hover {
     line-height: 1.5;
     font-size: 15px;
     white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .message.user .bubble {
@@ -242,6 +249,8 @@ nav a:hover {
     border-bottom: 1px solid #eceef3;
 }
 
+/* FEATURES */
+
 .features {
     width: min(1100px, 92%);
     margin: 0 auto 80px;
@@ -296,6 +305,8 @@ nav a:hover {
     font-size: 14px;
 }
 
+/* FOOTER */
+
 footer {
     border-top: 1px solid #e6e8ee;
     background: white;
@@ -304,6 +315,8 @@ footer {
     color: #8991a2;
     font-size: 13px;
 }
+
+/* TYPING */
 
 .typing {
     display: inline-flex;
@@ -328,6 +341,7 @@ footer {
 }
 
 @keyframes bounce {
+
     0%,60%,100% {
         transform: translateY(0);
     }
@@ -336,6 +350,8 @@ footer {
         transform: translateY(-5px);
     }
 }
+
+/* MOBILE */
 
 @media (max-width:800px) {
 
@@ -374,7 +390,6 @@ footer {
 </style>
 </head>
 
-
 <body>
 
 <header>
@@ -388,9 +403,13 @@ footer {
     </div>
 
     <nav>
+
         <a href="#chat">AI Chat</a>
+
         <a href="#features">Features</a>
+
         <a href="#about">About</a>
+
     </nav>
 
 </header>
@@ -607,19 +626,19 @@ const conversation = [
 ];
 
 
-function addMessage(text,type) {
+/* ADD MESSAGE */
+
+function addMessage(text, type) {
 
     if (welcome) {
         welcome.style.display = "none";
     }
-
 
     const message =
     document.createElement("div");
 
     message.className =
     "message " + type;
-
 
     const bubble =
     document.createElement("div");
@@ -630,16 +649,16 @@ function addMessage(text,type) {
     bubble.textContent =
     text;
 
-
     message.appendChild(bubble);
 
     chatArea.appendChild(message);
 
     chatArea.scrollTop =
     chatArea.scrollHeight;
-
 }
 
+
+/* TYPING */
 
 function addTyping() {
 
@@ -652,13 +671,11 @@ function addTyping() {
     message.id =
     "typingMessage";
 
-
     const bubble =
     document.createElement("div");
 
     bubble.className =
     "bubble";
-
 
     bubble.innerHTML = `
         <div class="typing">
@@ -668,16 +685,16 @@ function addTyping() {
         </div>
     `;
 
-
     message.appendChild(bubble);
 
     chatArea.appendChild(message);
 
     chatArea.scrollTop =
     chatArea.scrollHeight;
-
 }
 
+
+/* LOAD AI */
 
 async function loadAI() {
 
@@ -701,6 +718,11 @@ async function loadAI() {
         hasWebGPU
         ? "q4f16"
         : "q4";
+
+
+        console.log("Thinkora device:", device);
+
+        console.log("Thinkora dtype:", dtype);
 
 
         generator =
@@ -740,76 +762,221 @@ async function loadAI() {
         false;
 
 
+        input.focus();
+
+
     } catch(error) {
 
-        console.error(error);
+        console.error(
+            "THINKORA MODEL ERROR:",
+            error
+        );
 
 
         status.textContent =
-        "AI model could not load. Please refresh the page and try again.";
+        "AI model could not load. Check the browser console.";
+
+
+        addMessage(
+            "Model loading error: " +
+            (error?.message || String(error)),
+            "ai"
+        );
 
     }
 
 }
 
 
+/* AI RESPONSE */
+
 async function askAI(question) {
 
     conversation.push({
+
         role: "user",
+
         content: question
+
     });
 
-    const messages = conversation.slice(-8);
 
-    const result = await generator(messages, {
-        max_new_tokens: 160,
-        temperature: 0.7,
-        do_sample: true,
-        repetition_penalty: 1.1
-    });
+    /*
+       We intentionally build the prompt ourselves here.
+       This avoids relying on apply_chat_template(),
+       which was causing the previous generation error.
+    */
 
-    let answer = result[0].generated_text;
+    const recentMessages =
+    conversation.slice(-8);
 
-    // Transformers.js may return the complete conversation
-    // when chat messages are passed directly.
-    if (Array.isArray(answer)) {
-        const lastMessage = answer[answer.length - 1];
 
-        if (lastMessage && lastMessage.role === "assistant") {
-            answer = lastMessage.content;
-        } else {
-            answer = String(lastMessage?.content || "");
-        }
+    let prompt =
+    "<|im_start|>system\n" +
+    recentMessages[0].content +
+    "<|im_end|>\n";
+
+
+    for (
+        let i = 1;
+        i < recentMessages.length;
+        i++
+    ) {
+
+        prompt +=
+        "<|im_start|>" +
+        recentMessages[i].role +
+        "\n" +
+        recentMessages[i].content +
+        "<|im_end|>\n";
+
     }
 
-    answer = String(answer).trim();
+
+    prompt +=
+    "<|im_start|>assistant\n";
+
+
+    console.log(
+        "Thinkora prompt:",
+        prompt
+    );
+
+
+    const result =
+    await generator(
+        prompt,
+        {
+            max_new_tokens: 160,
+
+            temperature: 0.7,
+
+            do_sample: true,
+
+            repetition_penalty: 1.1,
+
+            return_full_text: false
+        }
+    );
+
+
+    console.log(
+        "Thinkora result:",
+        result
+    );
+
+
+    let answer = "";
+
+
+    if (
+        result &&
+        result[0]
+    ) {
+
+        if (
+            typeof result[0].generated_text === "string"
+        ) {
+
+            answer =
+            result[0].generated_text;
+
+        }
+
+        else if (
+            Array.isArray(result[0].generated_text)
+        ) {
+
+            const last =
+            result[0].generated_text[
+                result[0].generated_text.length - 1
+            ];
+
+            if (last) {
+
+                answer =
+                last.content ||
+                "";
+
+            }
+
+        }
+
+    }
+
+
+    answer =
+    String(answer)
+    .trim();
+
+
+    /*
+       Remove any accidental assistant markers.
+    */
+
+    answer =
+    answer
+    .replace(
+        /^<\|im_start\|>assistant\s*/i,
+        ""
+    )
+    .replace(
+        /<\|im_end\|>[\s\S]*$/i,
+        ""
+    )
+    .trim();
+
 
     if (!answer) {
-        answer = "I wasn't able to generate an answer. Please try asking in a different way.";
+
+        answer =
+        "I wasn't able to generate an answer. Please try asking in a different way.";
+
     }
 
+
     conversation.push({
+
         role: "assistant",
+
         content: answer
+
     });
 
+
     return answer;
- {
+
+}
+
+
+/* SEND MESSAGE */
+
+async function sendMessage() {
 
     const question =
     input.value.trim();
 
 
-    if (!question || !generator || isGenerating) {
+    if (
+        !question ||
+        !generator ||
+        isGenerating
+    ) {
+
         return;
+
     }
 
 
     isGenerating =
     true;
 
+
     sendBtn.disabled =
+    true;
+
+
+    input.disabled =
     true;
 
 
@@ -819,7 +986,8 @@ async function askAI(question) {
     );
 
 
-    input.value = "";
+    input.value =
+    "";
 
 
     addTyping();
@@ -838,7 +1006,9 @@ async function askAI(question) {
 
 
         if (typing) {
+
             typing.remove();
+
         }
 
 
@@ -848,9 +1018,14 @@ async function askAI(question) {
         );
 
 
-    } catch(error) {
+    }
 
-        console.error(error);
+    catch(error) {
+
+        console.error(
+            "THINKORA GENERATION ERROR:",
+            error
+        );
 
 
         const typing =
@@ -860,12 +1035,26 @@ async function askAI(question) {
 
 
         if (typing) {
+
             typing.remove();
+
         }
 
 
+        /*
+           IMPORTANT:
+           Show the real error so we can diagnose
+           the problem if generation fails again.
+        */
+
+        const errorText =
+        error?.message ||
+        String(error);
+
+
         addMessage(
-            "Sorry, something went wrong while generating the answer. Please try again.",
+            "Generation error: " +
+            errorText,
             "ai"
         );
 
@@ -875,19 +1064,29 @@ async function askAI(question) {
     isGenerating =
     false;
 
+
     sendBtn.disabled =
     false;
+
+
+    input.disabled =
+    false;
+
 
     input.focus();
 
 }
 
 
+/* BUTTON */
+
 sendBtn.addEventListener(
     "click",
     sendMessage
 );
 
+
+/* ENTER KEY */
 
 input.addEventListener(
     "keydown",
@@ -907,6 +1106,8 @@ input.addEventListener(
     }
 );
 
+
+/* START */
 
 loadAI();
 
